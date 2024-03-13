@@ -27,9 +27,12 @@ async function handler(req, res) {
         // Obter dados de categorias e procedimentos do db.json
         const categoriesAndProcedures = db.queries.getAllCategoriesAndProcedures;
 
-        // Executar consulta para cada categoria
+        // Executar consulta para obter todas as categorias
+        const categoriesResult = await pool.query(categoriesAndProcedures.sql);
+
+        // Mapear os resultados para o formato esperado
         const categories = await Promise.all(
-            categoriesAndProcedures.map(async (category) => {
+            categoriesResult.rows.map(async (category) => {
                 // Obtendo a categoria da propriedade categoria do objeto
                 const categoryName = category.categoria;
 
@@ -38,12 +41,14 @@ async function handler(req, res) {
                 const proceduresResult = await pool.query(proceduresQuery, [categoryName]);
 
                 // Mapeando os procedimentos para o formato esperado
+                const procedures = proceduresResult.rows.map(procedure => ({
+                    id: procedure.id,
+                    title: procedure.titulo,
+                }));
+
                 return {
                     categoria: categoryName,
-                    topics: proceduresResult.rows.map(procedure => ({
-                        id: procedure.id,
-                        title: procedure.titulo,
-                    }))
+                    topics: procedures
                 };
             })
         );
