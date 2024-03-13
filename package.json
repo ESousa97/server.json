@@ -2,7 +2,7 @@
   "name": "json-server-vercel",
   "version": "1.0.0",
   "description": "Deploy JSON Server to Vercel",
-  "main": "api/server.js",
+  "main": "api/index.js",
   "scripts": {
     "start": "json-server -p $PORT -w db.json"
   },
