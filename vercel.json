@@ -12,15 +12,15 @@
     },
     {
       "source": "/api/procedure/:id",
-      "destination": "/api/server.js"
+      "destination": "/api/procedure.js"
     },
     {
       "source": "/api/categories",
-      "destination": "/api/server.js"
+      "destination": "/api/categories.js"
     },
     {
       "source": "/api/cards",
-      "destination": "/api/server.js"
+      "destination": "/api/cardlist.js"
     }
   ]
 }
