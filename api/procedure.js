@@ -1,10 +1,4 @@
-const fs = require('fs');
 const { Pool } = require('pg');
-const express = require('express');
-const app = express();
-
-// Lê o arquivo db.json
-const db = JSON.parse(fs.readFileSync('db.json', 'utf8'));
 
 // Configuração do pool de conexão com o banco de dados
 const pool = new Pool({
@@ -15,32 +9,17 @@ const pool = new Pool({
 });
 
 async function handler(req, res) {
-    const { id } = req.params; // Use `req.params` para obter o `id` dos parâmetros da rota, não `req.query`
-
     try {
-        const { sql } = db.getProcedureById;
-        const { rows } = await pool.query(sql, [id]); // Executa a consulta usando o SQL da chave `getProcedureById`
-        
-        if (rows.length > 0) {
-            res.status(200).json(rows[0]);
-        } else {
-            res.status(404).json({ error: 'Procedimento não encontrado' });
-        }
+        // Realize a consulta ao banco de dados para obter todos os procedimentos
+        const { rows } = await pool.query('SELECT * FROM procedure;');
+      
+        // Retorne os procedimentos obtidos da consulta ao banco de dados
+        res.status(200).json(rows);
     } catch (error) {
-        console.error('Erro ao buscar o procedimento:', error);
+        console.error('Erro ao buscar dados dos procedimentos:', error);
+        // Em caso de erro na consulta ao banco de dados, retorne um erro 500
         res.status(500).json({ message: 'Erro ao consultar o banco de dados', error: error.message });
     }
 }
-
-// Middleware para desabilitar o CORS
-function enableCORS(req, res, next) {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-    res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-    next();
-}
-
-// Adicionando middleware de CORS à aplicação
-app.use(enableCORS);
 
 module.exports = handler;

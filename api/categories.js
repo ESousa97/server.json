@@ -1,10 +1,4 @@
-const fs = require('fs');
 const { Pool } = require('pg');
-const express = require('express');
-const app = express();
-
-// Lê o arquivo db.json
-const db = JSON.parse(fs.readFileSync('db.json', 'utf8'));
 
 // Configuração do pool de conexão com o banco de dados
 const pool = new Pool({
@@ -14,53 +8,18 @@ const pool = new Pool({
   }
 });
 
-// Middleware para desabilitar o CORS
-app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-    res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-    next();
-});
-
 async function handler(req, res) {
     try {
-        // Obter dados de categorias e procedimentos do db.json
-        const categoriesAndProcedures = db.queries.getAllCategoriesAndProcedures;
-
-        // Executar consulta para obter todas as categorias
-        const categoriesResult = await pool.query(categoriesAndProcedures.sql);
-
-        // Mapear os resultados para o formato esperado
-        const categories = await Promise.all(
-            categoriesResult.rows.map(async (category) => {
-                // Obtendo a categoria da propriedade categoria do objeto
-                const categoryName = category.categoria;
-
-                // Executando a consulta para obter os procedimentos da categoria
-                const proceduresQuery = 'SELECT id, titulo FROM procedure WHERE categoria = $1';
-                const proceduresResult = await pool.query(proceduresQuery, [categoryName]);
-
-                // Mapeando os procedimentos para o formato esperado
-                const procedures = proceduresResult.rows.map(procedure => ({
-                    id: procedure.id,
-                    title: procedure.titulo,
-                }));
-
-                return {
-                    categoria: categoryName,
-                    topics: procedures
-                };
-            })
-        );
-
-        res.status(200).json(categories);
+        // Realize a consulta ao banco de dados para obter todas as categorias
+        const { rows } = await pool.query('SELECT * FROM categories;');
+      
+        // Retorne as categorias obtidas da consulta ao banco de dados
+        res.status(200).json(rows);
     } catch (error) {
-        console.error('Erro ao buscar categorias e procedimentos:', error);
-        res.status(500).json({ message: 'Erro ao buscar categorias e procedimentos', error: error.message });
+        console.error('Erro ao buscar dados das categorias:', error);
+        // Em caso de erro na consulta ao banco de dados, retorne um erro 500
+        res.status(500).json({ message: 'Erro ao consultar o banco de dados', error: error.message });
     }
 }
-
-// Rota para manipular a solicitação
-app.get('/api/categories', handler);
 
 module.exports = handler;
