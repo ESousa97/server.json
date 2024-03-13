@@ -4,10 +4,9 @@
   "description": "Deploy JSON Server to Vercel",
   "main": "api/index.js",
   "scripts": {
-    "start": "json-server -p $PORT -w db.json"
+    "start": "node api/index.js"
   },
   "dependencies": {
-    "json-server": "^0.17.4",
     "pg": "^8.11.3"
   }
 }

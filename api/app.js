@@ -1,4 +1,3 @@
-// app.js
 const { createPool } = require('@vercel/postgres');
 const express = require('express');
 const cors = require('cors');
@@ -35,4 +34,5 @@ async function connectToDatabase() {
 
 connectToDatabase();
 
+// Exporta o aplicativo express
 module.exports = app;
