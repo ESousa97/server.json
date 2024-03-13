@@ -7,8 +7,20 @@
   },
   "rewrites": [
     {
-      "source": "/(.*)",
-      "destination": "api/server.js"
+      "source": "/api/search",
+      "destination": "/api/server.js"
+    },
+    {
+      "source": "/api/procedure/:id",
+      "destination": "/api/server.js"
+    },
+    {
+      "source": "/api/categories",
+      "destination": "/api/server.js"
+    },
+    {
+      "source": "/api/cards",
+      "destination": "/api/server.js"
     }
   ]
 }
