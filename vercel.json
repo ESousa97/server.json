@@ -1,26 +1,26 @@
 {
-  "functions": {
-    "api/server.js": {
-      "memory": 1024,
-      "includeFiles": "db.json"
+  "version": 2,
+  "builds": [
+    {
+      "src": "api/*.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "api/server.js",
+      "use": "@vercel/node",
+      "config": {
+        "memory": 1024,
+        "includeFiles": "db.json"
+      }
     }
-  },
-  "rewrites": [
-    {
-      "source": "/api/search",
-      "destination": "/api/search.js"
-    },
-    {
-      "source": "/api/procedure/:id",
-      "destination": "/api/procedure.js"
-    },
-    {
-      "source": "/api/categories",
-      "destination": "/api/categories.js"
-    },
-    {
-      "source": "/api/cards",
-      "destination": "/api/cardlist.js"
-    }
+  ],
+  "routes": [
+    { "handle": "filesystem" },
+    { "src": "/api/search", "dest": "/api/search.js" },
+    { "src": "/api/procedure/(.*)", "dest": "/api/procedure.js" },
+    { "src": "/api/categories", "dest": "/api/categories.js" },
+    { "src": "/api/cards", "dest": "/api/cardlist.js" },
+    { "src": "/(.*)", "dest": "/public/$1" },
+    { "src": "/.*", "status": 404, "dest": "/public/404.html" }
   ]
 }
