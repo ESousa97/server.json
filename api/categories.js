@@ -11,7 +11,7 @@ const pool = new Pool({
 async function handler(req, res) {
     try {
         // Realize a consulta ao banco de dados para obter todas as categorias
-        const { rows } = await pool.query('SELECT * FROM categories;');
+        const { rows } = await pool.query('SELECT * FROM procedure;');
       
         // Retorne as categorias obtidas da consulta ao banco de dados
         res.status(200).json(rows);
