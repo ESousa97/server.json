@@ -17,7 +17,7 @@ async function handler(req, res) {
         }
 
         const searchTerms = `%${query}%`;
-        const result = await pool.query('SELECT * FROM procedure WHERE content ILIKE $1 ORDER BY similarity(content, $1) DESC LIMIT 10', [searchTerms]);
+        const result = await pool.query('SELECT * FROM procedure WHERE conteudo ILIKE $1 ORDER BY similarity(content, $1) DESC LIMIT 10', [searchTerms]);
 
         // Retorne os resultados da busca obtidos da consulta ao banco de dados
         res.status(200).json(result.rows);
