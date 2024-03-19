@@ -7,8 +7,18 @@ const pool = new Pool({
     rejectUnauthorized: false // Certifique-se de que essa opção esteja configurada corretamente para o seu ambiente
   }
 });
-
 async function handler(req, res) {
+  // Configuração dos cabeçalhos de CORS
+  res.setHeader('Access-Control-Allow-Credentials', true);
+  res.setHeader('Access-Control-Allow-Origin', '*'); // Não use '*' em produção!
+  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
+  res.setHeader('Access-Control-Allow-Headers', 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version');
+
+  if (req.method === 'OPTIONS') {
+    // Método OPTIONS é utilizado como preflight pelo CORS, nós respondemos apenas com os cabeçalhos
+    return res.status(200).end();
+  }
+  
     try {
         // Realize a consulta ao banco de dados para obter todas as categorias
         const { rows } = await pool.query('SELECT * FROM procedure;');
