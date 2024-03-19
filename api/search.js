@@ -1,31 +1,39 @@
 const { Pool } = require('pg');
 
-// Configuração do pool de conexão com o banco de dados
 const pool = new Pool({
   connectionString: 'postgres://default:srE4lQaZ1oGy@ep-calm-field-a4v1frtu-pooler.us-east-1.aws.neon.tech:5432/verceldb?sslmode=require',
-  ssl: {
-    rejectUnauthorized: false // Certifique-se de que essa opção esteja configurada corretamente para o seu ambiente
-  }
+  ssl: { rejectUnauthorized: false }
 });
 
 async function handler(req, res) {
-    try {
-        // Realize a consulta ao banco de dados para fazer a busca
-        const { query } = req.query; // Use 'query' para corresponder ao termo usado no frontend
-        if (!query) {
-            return res.status(400).json({ error: 'Termo de busca não fornecido' });
-        }
+  // Configuração dos cabeçalhos de CORS
+  res.setHeader('Access-Control-Allow-Credentials', true);
+  res.setHeader('Access-Control-Allow-Origin', '*'); // Não use '*' em produção!
+  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
+  res.setHeader('Access-Control-Allow-Headers', 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version');
 
-        const searchTerms = `%${query}%`;
-        const result = await pool.query('SELECT * FROM procedure WHERE content ILIKE $1 ORDER BY similarity(content, $1) DESC LIMIT 10', [searchTerms]);
+  if (req.method === 'OPTIONS') {
+    // Método OPTIONS é utilizado como preflight pelo CORS, nós respondemos apenas com os cabeçalhos
+    return res.status(200).end();
+  }
 
-        // Retorne os resultados da busca obtidos da consulta ao banco de dados
-        res.status(200).json(result.rows);
-    } catch (error) {
-        console.error('Erro ao buscar dados:', error);
-        // Em caso de erro na consulta ao banco de dados, retorne um erro 500
-        res.status(500).json({ message: 'Erro ao consultar o banco de dados', error: error.message });
+  try {
+    const { query } = req.query;
+    if (!query) {
+      return res.status(400).json({ error: 'Termo de busca não fornecido' });
     }
+
+    const searchTerms = `%${query}%`;
+    const result = await pool.query(
+      'SELECT * FROM procedure WHERE conteudo ILIKE $1 ORDER BY similarity(conteudo, $1) DESC LIMIT 10', 
+      [searchTerms]
+    );
+
+    return res.status(200).json(result.rows);
+  } catch (error) {
+    console.error('Erro ao buscar dados:', error);
+    return res.status(500).json({ message: 'Erro ao consultar o banco de dados', error: error.message });
+  }
 }
 
 module.exports = handler;
