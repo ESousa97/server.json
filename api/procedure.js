@@ -2,7 +2,7 @@ const { Pool } = require('pg');
 
 // Configuração do pool de conexão com o banco de dados
 const pool = new Pool({
-  connectionString: 'postgres://default:srE4lQaZ1oGy@ep-calm-field-a4v1frtu-pooler.us-east-1.aws.neon.tech:5432/verceldb?sslmode=require',
+  connectionString: 'sua_conexao_com_o_banco_de_dados',
   ssl: {
     rejectUnauthorized: false // Certifique-se de que essa opção esteja configurada corretamente para o seu ambiente
   }
@@ -20,18 +20,29 @@ async function handler(req, res) {
     return res.status(200).end();
   }
 
-
-    try {
-        // Realize a consulta ao banco de dados para obter todos os procedimentos
-        const { rows } = await pool.query('SELECT * FROM procedure;');
-      
-        // Retorne os procedimentos obtidos da consulta ao banco de dados
-        res.status(200).json(rows);
-    } catch (error) {
-        console.error('Erro ao buscar dados dos procedimentos:', error);
-        // Em caso de erro na consulta ao banco de dados, retorne um erro 500
-        res.status(500).json({ message: 'Erro ao consultar o banco de dados', error: error.message });
+  try {
+    // Verifica se foi fornecido um ID na requisição
+    const id = req.query.id;
+    if (!id) {
+      return res.status(400).json({ message: 'ID do procedimento não fornecido' });
     }
+
+    // Realize a consulta ao banco de dados para obter o procedimento com o ID fornecido
+    const query = 'SELECT * FROM procedure WHERE id = $1';
+    const { rows } = await pool.query(query, [id]);
+
+    // Verifica se o procedimento com o ID fornecido existe
+    if (rows.length === 0) {
+      return res.status(404).json({ message: 'Procedimento não encontrado' });
+    }
+
+    // Retorne o procedimento obtido da consulta ao banco de dados
+    res.status(200).json(rows[0]);
+  } catch (error) {
+    console.error('Erro ao buscar dados do procedimento:', error);
+    // Em caso de erro na consulta ao banco de dados, retorne um erro 500
+    res.status(500).json({ message: 'Erro ao consultar o banco de dados', error: error.message });
+  }
 }
 
 module.exports = handler;
