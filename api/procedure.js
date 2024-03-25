@@ -2,7 +2,7 @@ const { Pool } = require('pg');
 
 // Configuração do pool de conexão com o banco de dados
 const pool = new Pool({
-  connectionString: 'sua_conexao_com_o_banco_de_dados',
+  connectionString: 'postgres://default:srE4lQaZ1oGy@ep-calm-field-a4v1frtu-pooler.us-east-1.aws.neon.tech:5432/verceldb?sslmode=require',
   ssl: {
     rejectUnauthorized: false // Certifique-se de que essa opção esteja configurada corretamente para o seu ambiente
   }
