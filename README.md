@@ -89,7 +89,7 @@ Este projeto foi oficialmente descontinuado em 08 de outubro de 2024. Ele está 
 
 - A coleta de dados e qualquer integração com serviços externos foram desativadas.
 
-- O uso deste código é de sua inteira responsabilidade. Para detalhes adicionais, consulte os [Termos de Uso](https://github.com/ESousa97/ESdatabase/blob/main/pages/terms.js) e a [Política de Privacidade](https://github.com/ESousa97/ESdatabase/blob/main/pages/privacy.js).
+- O uso deste código é de sua inteira responsabilidade. Para detalhes adicionais, consulte os [Termos de Uso](https://www.esdatabase.com.br/terms.html) e a [Política de Privacidade](https://www.esdatabase.com.br/privacy.html).
 
 ---
 
