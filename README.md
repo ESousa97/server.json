@@ -1,45 +1,94 @@
-## Deploy JSON Server to Vercel
+# EsDataBase
 
-A template to deploy [JSON Server](https://github.com/typicode/json-server) to [Vercel](https://vercel.com), allow you to run fake REST API online!
+EsDataBase é uma aplicação robusta para gerenciar procedimentos e categorias, desenvolvida com **Node.js**, **Express**, e **PostgreSQL**. A aplicação está configurada para ser facilmente implantada no Vercel, utilizando **@vercel/postgres** para integração com o banco de dados e garantindo um ambiente escalável e eficiente.
 
-Demo from this repository: 
+## Tecnologias Utilizadas
 
-1. https://json-server-in.vercel.app
-2. https://json-server-in.vercel.app/api/posts
+- **Node.js**: Plataforma de execução de código JavaScript no lado do servidor.
+- **Express**: Framework minimalista para Node.js, facilitando a criação de APIs robustas.
+- **PostgreSQL**: Banco de dados relacional utilizado para armazenamento dos procedimentos, categorias e cards.
+- **@vercel/postgres**: Integração perfeita com Vercel para gerenciar o banco de dados em um ambiente de deploy automatizado.
+- **CORS**: Middleware para lidar com permissões de acesso entre domínios.
+- **Vercel**: Plataforma de deploy que facilita a hospedagem da aplicação com alta escalabilidade.
 
-![Powered by Vercel](https://images.ctfassets.net/e5382hct74si/78Olo8EZRdUlcDUFQvnzG7/fa4cdb6dc04c40fceac194134788a0e2/1618983297-powered-by-vercel.svg)
+## Funcionalidades
 
-### How to use
+### Back-end
+- **Gerenciamento de Procedimentos**: A API permite criar, ler, atualizar e deletar procedimentos.
+- **Consulta por Categorias**: A API suporta a consulta de categorias e seus respectivos procedimentos.
+- **Busca de Procedimentos**: O sistema inclui uma funcionalidade de busca otimizada com SQL, permitindo a pesquisa de procedimentos com base em termos fornecidos.
+- **Listagem de Cards**: A aplicação também permite listar todos os "cards" associados aos procedimentos.
 
-1. Click "**Use this template**" or clone this repository.
-2. Update or use the default [`db.json`](./db.json) in the repository.
-3. Sign Up or login into [Vercel](https://vercel.com).
-4. From the Vercel dashboard, click "**+ New Project**" then "**Import**" your repository.
-5. In the "**Configure Project**" screen, leave everything default and click "**Deploy**".
-6. Wait until deployment is done, and your own JSON server is ready to serve!
+### Principais Endpoints
 
-## Default `db.json`
+| Método | Endpoint                 | Descrição                                         |
+|--------|--------------------------|---------------------------------------------------|
+| GET    | `/api/cardlist`           | Retorna todos os cards                            |
+| GET    | `/api/categories`         | Retorna todas as categorias e procedimentos       |
+| GET    | `/api/procedure`          | Retorna um procedimento por ID                    |
+| GET    | `/api/search`             | Busca procedimentos por termo                     |
 
-```json
-{
-  "posts": [
-    { "id": 1, "title": "json-server", "author": "typicode" }
-  ],
-  "comments": [
-    { "id": 1, "body": "some comment", "postId": 1 }
-  ],
-  "profile": { "name": "typicode" }
-}
+### Estrutura do Banco de Dados
+
+A aplicação utiliza PostgreSQL como banco de dados principal. A seguir estão algumas das principais queries utilizadas:
+
+- **Buscar Procedimentos**:
+  ```sql
+  SELECT id, titulo, descricao FROM procedure WHERE conteudo ILIKE $1 ORDER BY similarity(conteudo, $1) DESC LIMIT 10;
+  ```
+
+- **Buscar Procedimento por ID:**
+  ```sql
+  SELECT * FROM procedure WHERE id = $1;
+  ```
+
+- **Listar Todas as Categorias:**
+  ```sql
+  SELECT DISTINCT categoria FROM procedure;
+  ```
+
+- **Listar Todos os Cards:**
+  ```sql
+  SELECT * FROM cards;
+  ```
+# Estrutura do Projeto
+
+  ```bash
+.
+├── .github/                 # Diretório de arquivos de configuração do GitHub
+├── api/                     # Diretório de APIs
+│   ├── app.js               # Lida com a aplicação principal
+│   ├── cardlist.js          # Endpoint para listar todos os cards
+│   ├── categories.js        # Endpoint para listar categorias e procedimentos
+│   ├── index.js             # Ponto de entrada principal
+│   ├── procedure.js         # Endpoint para consulta de um procedimento específico
+│   ├── search.js            # Endpoint de busca de procedimentos
+├── node_modules/            # Dependências do Node.js
+├── .env                     # Variáveis de ambiente (não incluído no repositório)
+├── .gitignore               # Arquivo para ignorar arquivos desnecessários no Git
+├── db.json                  # Definições e dados usados na aplicação (SQL, JSON, etc.)
+├── LICENSE                  # Arquivo de licença do projeto
+├── package-lock.json        # Arquivo de lock das dependências do Node.js
+├── package.json             # Definições e dependências do projeto
+├── README.md                # Arquivo de documentação principal do projeto
+└── vercel.json              # Configurações de deploy no Vercel
+
 ```
 
-## Enable write operations
+# Licença
 
-By default, only GET operation is allowed, thanks to the contribution by [@VicAv99](https://www.github.com/VicAv99) at [#6](https://github.com/kitloong/json-server-vercel/issues/6), we can now enable write operations as well.
+Este projeto está licenciado sob a MIT License – veja o arquivo [LICENSE](./LICENSE) para mais detalhes.
 
-You can find the example code in [`api/server.js`](./api/server.js).
+---
 
-## Reference
+## Front-end do Projeto
 
-1. https://github.com/typicode/json-server
-2. https://vercel.com
-3. https://shadowsmith.com/how-to-deploy-an-express-api-to-vercel
+O código-fonte completo do front-end deste projeto pode ser acessado no repositório abaixo:
+
+<p align="center">
+  <a href="https://github.com/ESousa97/ESdatabase" target="_blank">
+    <img alt="Front-end" src="https://img.shields.io/badge/GitHub-Front--end-green?style=for-the-badge&logo=github">
+  </a>
+</p>
+
+---

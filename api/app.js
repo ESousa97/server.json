@@ -7,7 +7,7 @@ const app = express();
 app.use(cors());
 
 // Utilize a string de conexão diretamente (não recomendado para produção)
-const connectionString = "postgres://default:srE4lQaZ1oGy@ep-calm-field-a4v1frtu-pooler.us-east-1.aws.neon.tech:5432/verceldb?sslmode=require";
+const connectionString = "Enter your database connection here";
 
 // Cria um pool de conexão usando @vercel/postgres
 const pool = createPool({
