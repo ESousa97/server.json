@@ -79,6 +79,18 @@ A aplicação utiliza PostgreSQL como banco de dados principal. A seguir estão 
 
 Este projeto está licenciado sob a MIT License – veja o arquivo [LICENSE](./LICENSE) para mais detalhes.
 
+
+# 🚨 Projeto Descontinuado
+Este projeto foi oficialmente descontinuado em 08 de outubro de 2024. Ele está sendo mantido publicamente no GitHub apenas para fins de consulta e visualização do código fonte. Não haverá atualizações futuras, suporte técnico ou correções de segurança.
+
+**Importante:**
+
+- Não recomendamos o uso deste código em produção, pois ele pode conter vulnerabilidades ou funcionalidades desatualizadas.
+
+- A coleta de dados e qualquer integração com serviços externos foram desativadas.
+
+- O uso deste código é de sua inteira responsabilidade. Para detalhes adicionais, consulte os [Termos de Uso](https://github.com/ESousa97/ESdatabase/blob/main/pages/terms.js) e a [Política de Privacidade](https://github.com/ESousa97/ESdatabase/blob/main/pages/privacy.js).
+
 ---
 
 ## Front-end do Projeto
