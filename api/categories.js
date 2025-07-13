@@ -2,11 +2,10 @@ const { Pool } = require('pg');
 
 // Configuração do pool de conexão com o banco de dados
 const pool = new Pool({
-  connectionString: 'Enter your database connection here',
-  ssl: {
-    rejectUnauthorized: false // Certifique-se de que essa opção esteja configurada corretamente para o seu ambiente
-  }
+  connectionString: process.env.DATABASE_URL || 'postgresql://postgres:123456@localhost:5432/esdatabase',
+  ssl: false
 });
+
 async function handler(req, res) {
   // Configuração dos cabeçalhos de CORS
   res.setHeader('Access-Control-Allow-Credentials', true);

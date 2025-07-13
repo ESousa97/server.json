@@ -1,8 +1,8 @@
 const { Pool } = require('pg');
 
 const pool = new Pool({
-  connectionString: 'Enter your database connection here',
-  ssl: { rejectUnauthorized: false }
+  connectionString: process.env.DATABASE_URL || 'postgresql://postgres:123456@localhost:5432/esdatabase',
+  ssl: false
 });
 
 async function handler(req, res) {
