@@ -1,0 +1,35 @@
+name: Bug report
+description: Reporte um problema para que possamos corrigir
+title: 'bug: '
+labels: [bug]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Descrição
+      description: O que aconteceu? O que você esperava?
+      placeholder: 'Ao chamar /api/search com query=...'
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Passos para reproduzir
+      description: Passo a passo mínimo.
+      value: |
+        1.
+        2.
+        3.
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs/erros
+      render: shell
+  - type: input
+    id: environment
+    attributes:
+      label: Ambiente
+      description: Node version, OS, Vercel/local.
+      placeholder: 'Node 20, Windows 11, local'

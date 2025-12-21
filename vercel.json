@@ -25,7 +25,7 @@
     },
     {
       "source": "/api/procedure/:id",
-      "destination": "/api/procedure.js"
+      "destination": "/api/procedure.js?id=:id"
     },
     {
       "source": "/api/categories",

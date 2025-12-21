@@ -3,3 +3,25 @@ node_modules/
 
 .idea
 .env
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Coverage
+coverage/
+.nyc_output/
+
+# Vercel
+.vercel/
+
+# OS / Editor
+.DS_Store
+Thumbs.db
+
+# Local reports (generated, not committed)
+BASELINE.md
+RELATORIO FINAL.md

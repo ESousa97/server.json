@@ -1,110 +1,90 @@
-# EsDataBase
+# EsDataBase API
 
-EsDataBase é uma aplicação robusta para gerenciar procedimentos e categorias, desenvolvida com **Node.js**, **Express**, e **PostgreSQL**. A aplicação está configurada para ser facilmente implantada no Vercel, utilizando **@vercel/postgres** para integração com o banco de dados e garantindo um ambiente escalável e eficiente.
+![CI](../../actions/workflows/ci.yml/badge.svg)
+![License](https://img.shields.io/badge/License-MIT-yellow.svg)
 
-## Tecnologias Utilizadas
+API Node.js + Express com integração PostgreSQL, pronta para rodar localmente e para deploy em **Vercel Functions**.
 
-- **Node.js**: Plataforma de execução de código JavaScript no lado do servidor.
-- **Express**: Framework minimalista para Node.js, facilitando a criação de APIs robustas.
-- **PostgreSQL**: Banco de dados relacional utilizado para armazenamento dos procedimentos, categorias e cards.
-- **@vercel/postgres**: Integração perfeita com Vercel para gerenciar o banco de dados em um ambiente de deploy automatizado.
-- **CORS**: Middleware para lidar com permissões de acesso entre domínios.
-- **Vercel**: Plataforma de deploy que facilita a hospedagem da aplicação com alta escalabilidade.
+Este repositório foca em:
+
+- endpoints HTTP simples e estáveis
+- integração com Postgres via variáveis de ambiente
+- boas práticas de manutenção (lint, testes, CI, docs e governança)
 
 ## Funcionalidades
 
-### Back-end
-- **Gerenciamento de Procedimentos**: A API permite criar, ler, atualizar e deletar procedimentos.
-- **Consulta por Categorias**: A API suporta a consulta de categorias e seus respectivos procedimentos.
-- **Busca de Procedimentos**: O sistema inclui uma funcionalidade de busca otimizada com SQL, permitindo a pesquisa de procedimentos com base em termos fornecidos.
-- **Listagem de Cards**: A aplicação também permite listar todos os "cards" associados aos procedimentos.
+- Listagem de cards
+- Listagem de procedimentos
+- Consulta de procedimento por id
+- Busca por conteúdo (`ILIKE`) com fallback quando `similarity()` não existir
 
-### Principais Endpoints
+## Stack e requisitos
 
-| Método | Endpoint                 | Descrição                                         |
-|--------|--------------------------|---------------------------------------------------|
-| GET    | `/api/cardlist`           | Retorna todos os cards                            |
-| GET    | `/api/categories`         | Retorna todas as categorias e procedimentos       |
-| GET    | `/api/procedure`          | Retorna um procedimento por ID                    |
-| GET    | `/api/search`             | Busca procedimentos por termo                     |
+- Node.js 20+ (recomendado)
+- npm 9+
+- PostgreSQL (para endpoints que consultam o banco)
 
-### Estrutura do Banco de Dados
+## Instalação
 
-A aplicação utiliza PostgreSQL como banco de dados principal. A seguir estão algumas das principais queries utilizadas:
-
-- **Buscar Procedimentos**:
-  ```sql
-  SELECT id, titulo, descricao FROM procedure WHERE conteudo ILIKE $1 ORDER BY similarity(conteudo, $1) DESC LIMIT 10;
-  ```
-
-- **Buscar Procedimento por ID:**
-  ```sql
-  SELECT * FROM procedure WHERE id = $1;
-  ```
-
-- **Listar Todas as Categorias:**
-  ```sql
-  SELECT DISTINCT categoria FROM procedure;
-  ```
-
-- **Listar Todos os Cards:**
-  ```sql
-  SELECT * FROM cards;
-  ```
-# Estrutura do Projeto
-
-  ```bash
-.
-├── .github/                 # Diretório de arquivos de configuração do GitHub
-├── api/                     # Diretório de APIs
-│   ├── app.js               # Lida com a aplicação principal
-│   ├── cardlist.js          # Endpoint para listar todos os cards
-│   ├── categories.js        # Endpoint para listar categorias e procedimentos
-│   ├── index.js             # Ponto de entrada principal
-│   ├── procedure.js         # Endpoint para consulta de um procedimento específico
-│   ├── search.js            # Endpoint de busca de procedimentos
-├── node_modules/            # Dependências do Node.js
-├── .env                     # Variáveis de ambiente (não incluído no repositório)
-├── .gitignore               # Arquivo para ignorar arquivos desnecessários no Git
-├── db.json                  # Definições e dados usados na aplicação (SQL, JSON, etc.)
-├── LICENSE                  # Arquivo de licença do projeto
-├── package-lock.json        # Arquivo de lock das dependências do Node.js
-├── package.json             # Definições e dependências do projeto
-├── README.md                # Arquivo de documentação principal do projeto
-└── vercel.json              # Configurações de deploy no Vercel
-
+```bash
+npm ci
 ```
 
-# Licença
+## Configuração
 
-Este projeto está licenciado sob a MIT License – veja o arquivo [LICENSE](./LICENSE) para mais detalhes.
+Crie `.env` a partir de `.env.example`:
 
+```bash
+copy .env.example .env
+```
 
-# 🚨 Projeto Descontinuado
-Este projeto foi oficialmente descontinuado em 08 de outubro de 2024. Ele está sendo mantido publicamente no GitHub apenas para fins de consulta e visualização do código fonte. Não haverá atualizações futuras, suporte técnico ou correções de segurança.
+Preencha `DATABASE_URL` (local) ou use as variáveis fornecidas pela Vercel (ex.: `POSTGRES_URL`).
 
-**Importante:**
+## Uso (local)
 
-- Não recomendamos o uso deste código em produção, pois ele pode conter vulnerabilidades ou funcionalidades desatualizadas.
+Subir o servidor:
 
-- A coleta de dados e qualquer integração com serviços externos foram desativadas.
+```bash
+npm start
+```
 
-- O uso deste código é de sua inteira responsabilidade.
+Teste rápido:
 
----
+```bash
+curl http://localhost:3000/
+curl http://localhost:3000/api/cards
+curl "http://localhost:3000/api/procedure?id=1"
+curl "http://localhost:3000/api/procedure/1"
+curl "http://localhost:3000/api/search?query=termo"
+```
 
-## Front-end do Projeto
+## Endpoints
 
-O código-fonte completo do front-end deste projeto pode ser acessado no repositório abaixo:
+Documentação completa em [docs/API.md](docs/API.md).
 
-<p align="center">
-  <a href="https://github.com/ESousa97/ESdatabase" target="_blank">
-    <img alt="Front-end" src="https://img.shields.io/badge/GitHub-Front--end-green?style=for-the-badge&logo=github">
-  </a>
-</p>
+## Arquitetura
 
----
+Visão geral e diagrama textual em [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
+## Scripts
 
-> ✨ **Criado em:** 8 de mar. de 2024 às 15:26
+- `npm start`: servidor local
+- `npm run lint`: lint
+- `npm run format`: format
+- `npm test`: testes
 
+## Contribuição
+
+Veja [CONTRIBUTING.md](CONTRIBUTING.md).
+
+## Segurança
+
+Veja [SECURITY.md](SECURITY.md).
+
+## Licença
+
+MIT. Veja [LICENSE](LICENSE).
+
+## Status do projeto
+
+Maintained.
