@@ -12,11 +12,8 @@ app.all('/api/cards', cardlistHandler); // Vercel rewrite
 
 app.all('/api/categories', categoriesHandler);
 
+app.all('/api/procedure/:id', procedureHandler);
 app.all('/api/procedure', procedureHandler); // legacy (?id=)
-app.all('/api/procedure/:id', (req, res) => {
-  req.query.id = req.params.id;
-  return procedureHandler(req, res);
-});
 
 app.all('/api/search', searchHandler);
 
