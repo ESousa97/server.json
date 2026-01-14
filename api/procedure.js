@@ -2,7 +2,8 @@ const { createHandler, ok, badRequest, notFound, asInt } = require('../src/http'
 const { query, getQuery } = require('../src/db');
 
 module.exports = createHandler(async (req, res) => {
-  const id = asInt(req.query.id);
+  // Express 5: req.query is a getter-only property, so we check req.params.id as fallback
+  const id = asInt(req.params?.id ?? req.query.id);
   if (!id) return badRequest(res, 'ID do procedimento não fornecido ou inválido');
 
   const { rows } = await query(getQuery('getProcedureById'), [id]);
